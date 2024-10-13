@@ -1,0 +1,99 @@
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "ShopGui"
+screenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 300, 0, 200)
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+mainFrame.Parent = screenGui
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Text = "Halloween Pet Buyer"
+titleLabel.Size = UDim2.new(1, 0, 0, 30)
+titleLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+titleLabel.TextColor3 = Color3.new(1, 1, 1)
+titleLabel.Parent = mainFrame
+
+local buyCountLabel = Instance.new("TextLabel")
+buyCountLabel.Text = "Buy Count:"
+buyCountLabel.Size = UDim2.new(0.5, -10, 0, 30)
+buyCountLabel.Position = UDim2.new(0, 10, 0, 40)
+buyCountLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+buyCountLabel.TextColor3 = Color3.new(1, 1, 1)
+buyCountLabel.Parent = mainFrame
+
+local buyCountInput = Instance.new("TextBox")
+buyCountInput.PlaceholderText = "Enter amount"
+buyCountInput.Size = UDim2.new(0.5, -10, 0, 30)
+buyCountInput.Position = UDim2.new(0.5, 0, 0, 40)
+buyCountInput.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+buyCountInput.Text = ""
+buyCountInput.Parent = mainFrame
+
+local startButton = Instance.new("TextButton")
+startButton.Text = "Start Buying"
+startButton.Size = UDim2.new(0.5, -10, 0, 40)
+startButton.Position = UDim2.new(0, 10, 0, 80)
+startButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+startButton.TextColor3 = Color3.new(1, 1, 1)
+startButton.Parent = mainFrame
+
+local stopButton = Instance.new("TextButton")
+stopButton.Text = "Stop Buying"
+stopButton.Size = UDim2.new(0.5, -10, 0, 40)
+stopButton.Position = UDim2.new(0.5, 0, 0, 80)
+stopButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
+stopButton.TextColor3 = Color3.new(1, 1, 1)
+stopButton.Parent = mainFrame
+
+local statusLabel = Instance.new("TextLabel")
+statusLabel.Text = "Status: Idle"
+statusLabel.Size = UDim2.new(1, 0, 0, 30)
+statusLabel.Position = UDim2.new(0, 0, 0, 130)
+statusLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+statusLabel.TextColor3 = Color3.new(1, 1, 1)
+statusLabel.Parent = mainFrame
+
+local isBuying = false
+
+local function startBuying()
+    local buyCount = tonumber(buyCountInput.Text) or 1
+    statusLabel.Text = "Status: Buying..."
+
+    local args = {
+        [1] = "pets",
+        [2] = "halloween_2024_scarebear",
+        [3] = {
+            ["buy_count"] = 1
+        }
+    }
+
+    isBuying = true
+    task.spawn(function()
+        for i = 1, buyCount do
+            if not isBuying then break end
+
+            local success, errorMsg = pcall(function()
+                game:GetService("ReplicatedStorage").API:FindFirstChild("ShopAPI/BuyItem"):InvokeServer(unpack(args))
+            end)
+
+            if not success then
+                statusLabel.Text = "Status: Error - " .. tostring(errorMsg)
+                break
+            end
+
+            task.wait(0.5)
+        end
+        statusLabel.Text = "Status: Idle"
+        isBuying = false
+    end)
+end
+
+local function stopBuying()
+    isBuying = false
+    statusLabel.Text = "Status: Stopped"
+end
+
+startButton.MouseButton1Click:Connect(startBuying)
+stopButton.MouseButton1Click:Connect(stopBuying)
