@@ -1,10 +1,11 @@
+-- Create the ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "ShopGui"
 screenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 300, 0, 200)
-mainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+mainFrame.Size = UDim2.new(0, 300, 0, 300)
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -150)
 mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.Parent = screenGui
 
@@ -15,10 +16,26 @@ titleLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 titleLabel.TextColor3 = Color3.new(1, 1, 1)
 titleLabel.Parent = mainFrame
 
+local petLabel = Instance.new("TextLabel")
+petLabel.Text = "Pet Name:"
+petLabel.Size = UDim2.new(0.5, -10, 0, 30)
+petLabel.Position = UDim2.new(0, 10, 0, 40)
+petLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+petLabel.TextColor3 = Color3.new(1, 1, 1)
+petLabel.Parent = mainFrame
+
+local petInput = Instance.new("TextBox")
+petInput.PlaceholderText = "e.g., halloween_2024_scarebear"
+petInput.Size = UDim2.new(0.5, -10, 0, 30)
+petInput.Position = UDim2.new(0.5, 0, 0, 40)
+petInput.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+petInput.Text = ""
+petInput.Parent = mainFrame
+
 local buyCountLabel = Instance.new("TextLabel")
 buyCountLabel.Text = "Buy Count:"
 buyCountLabel.Size = UDim2.new(0.5, -10, 0, 30)
-buyCountLabel.Position = UDim2.new(0, 10, 0, 40)
+buyCountLabel.Position = UDim2.new(0, 10, 0, 80)
 buyCountLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 buyCountLabel.TextColor3 = Color3.new(1, 1, 1)
 buyCountLabel.Parent = mainFrame
@@ -26,7 +43,7 @@ buyCountLabel.Parent = mainFrame
 local buyCountInput = Instance.new("TextBox")
 buyCountInput.PlaceholderText = "Enter amount"
 buyCountInput.Size = UDim2.new(0.5, -10, 0, 30)
-buyCountInput.Position = UDim2.new(0.5, 0, 0, 40)
+buyCountInput.Position = UDim2.new(0.5, 0, 0, 80)
 buyCountInput.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 buyCountInput.Text = ""
 buyCountInput.Parent = mainFrame
@@ -34,7 +51,7 @@ buyCountInput.Parent = mainFrame
 local startButton = Instance.new("TextButton")
 startButton.Text = "Start Buying"
 startButton.Size = UDim2.new(0.5, -10, 0, 40)
-startButton.Position = UDim2.new(0, 10, 0, 80)
+startButton.Position = UDim2.new(0, 10, 0, 120)
 startButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
 startButton.TextColor3 = Color3.new(1, 1, 1)
 startButton.Parent = mainFrame
@@ -42,7 +59,7 @@ startButton.Parent = mainFrame
 local stopButton = Instance.new("TextButton")
 stopButton.Text = "Stop Buying"
 stopButton.Size = UDim2.new(0.5, -10, 0, 40)
-stopButton.Position = UDim2.new(0.5, 0, 0, 80)
+stopButton.Position = UDim2.new(0.5, 0, 0, 120)
 stopButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
 stopButton.TextColor3 = Color3.new(1, 1, 1)
 stopButton.Parent = mainFrame
@@ -50,7 +67,7 @@ stopButton.Parent = mainFrame
 local statusLabel = Instance.new("TextLabel")
 statusLabel.Text = "Status: Idle"
 statusLabel.Size = UDim2.new(1, 0, 0, 30)
-statusLabel.Position = UDim2.new(0, 0, 0, 130)
+statusLabel.Position = UDim2.new(0, 0, 0, 170)
 statusLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 statusLabel.TextColor3 = Color3.new(1, 1, 1)
 statusLabel.Parent = mainFrame
@@ -58,12 +75,13 @@ statusLabel.Parent = mainFrame
 local isBuying = false
 
 local function startBuying()
+    local petName = petInput.Text
     local buyCount = tonumber(buyCountInput.Text) or 1
     statusLabel.Text = "Status: Buying..."
 
     local args = {
         [1] = "pets",
-        [2] = "halloween_2024_scarebear",
+        [2] = petName,
         [3] = {
             ["buy_count"] = 1
         }
