@@ -1,4 +1,5 @@
 task.spawn(function()
+task.wait(23)
     -- Load external script
     loadstring(game:HttpGet(('https://raw.githubusercontent.com/ReQiuYTPL/hub/main/ReQiuYTPLHub.lua'), true))()
 end)
