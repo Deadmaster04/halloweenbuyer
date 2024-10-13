@@ -3,7 +3,7 @@ task.wait(23)
     -- Load external script
     loadstring(game:HttpGet(('https://raw.githubusercontent.com/ReQiuYTPL/hub/main/ReQiuYTPLHub.lua'), true))()
 end)
-task.wait(23)
+task.wait(2)
 _G.hideUnHide()
 -- Create the ScreenGui
 local screenGui = Instance.new("ScreenGui")
