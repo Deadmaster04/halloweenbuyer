@@ -111,11 +111,6 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    -- Load external script
-    loadstring(game:HttpGet(('https://raw.githubusercontent.com/ReQiuYTPL/hub/main/ReQiuYTPLHub.lua'), true))()
-end)
-
-task.spawn(function()
     task.wait(23)
     getgenv().Config = {
         ["username"] = "",
