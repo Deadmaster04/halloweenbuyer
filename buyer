@@ -3,6 +3,7 @@ local function rename(remotename,hashedremote)
 end
 
 table.foreach(getupvalue(require(game:GetService("ReplicatedStorage"):WaitForChild("Fsys")).load("RouterClient").init,4),rename)
+
 loadstring(game:HttpGet(('https://raw.githubusercontent.com/ReQiuYTPL/hub/main/ReQiuYTPLHub.lua'), true))()
 end)
 task.wait(10)
