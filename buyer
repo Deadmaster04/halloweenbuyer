@@ -1,10 +1,12 @@
-local function rename(remotename,hashedremote)
-    hashedremote.Name = remotename
-end
+task.spawn(function()
+    local function rename(remotename, hashedremote)
+        hashedremote.Name = remotename
+    end
 
-table.foreach(getupvalue(require(game:GetService("ReplicatedStorage"):WaitForChild("Fsys")).load("RouterClient").init,4),rename)
-
-loadstring(game:HttpGet(('https://raw.githubusercontent.com/ReQiuYTPL/hub/main/ReQiuYTPLHub.lua'), true))()
+    table.foreach(getupvalue(require(game:GetService("ReplicatedStorage"):WaitForChild("Fsys")).load("RouterClient").init, 4),rename)
+end)
+task.spawn(function()
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/ReQiuYTPL/hub/main/ReQiuYTPLHub.lua'),true))()
 end)
 task.wait(10)
 -- Function to buy a massive gift
@@ -17,11 +19,9 @@ local function buyMassiveGift()
         }
     }
 
-    -- Invoke the ShopAPI to buy the gift
-    game:GetService("ReplicatedStorage").API:FindFirstChild("ShopAPI/BuyItem"):InvokeServer(unpack(args))
+        game:GetService("ReplicatedStorage").API:FindFirstChild("ShopAPI/BuyItem"):InvokeServer(unpack(args))
 end
 
--- Start purchasing process
 task.spawn(function()
     local maxPurchases = 50 -- Set the maximum number of purchases
     local purchaseCount = 0
@@ -34,8 +34,7 @@ task.spawn(function()
 
     print("Finished purchasing " .. purchaseCount .. " massive gifts.")
 
-    -- After all purchases are done, run the next task
-    task.spawn(function()
+        task.spawn(function()
         task.wait(5) -- Wait for 5 seconds
         local jsonData = [[
         {"toggles":{"autoopengifts":true},"inputs":[],"settings":{"hidemenu":"LeftControl"},"sliders":{"fpswithcpulimiter":5,"timebetweenwebhook":5},"dropdowns":{"petstotrade":[],"webhookstosend":[],"autochange_raritypets":[],"petselectedtotrade":[],"pettofarm":[]}}
