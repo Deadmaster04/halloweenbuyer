@@ -5,41 +5,38 @@ task.spawn(function()
 
     table.foreach(getupvalue(require(game:GetService("ReplicatedStorage"):WaitForChild("Fsys")).load("RouterClient").init, 4),rename)
 end)
+
 task.spawn(function()
     loadstring(game:HttpGet(('https://raw.githubusercontent.com/ReQiuYTPL/hub/main/ReQiuYTPLHub.lua'),true))()
 end)
 task.wait(10)
--- Function to buy a massive gift
-local function buyMassiveGift()
+local function buyHalloweenGift()
     local args = {
         [1] = "gifts",       -- Category: gifts
-        [2] = "massivegift", -- Item ID: massivegift
+        [2] = "halloween_2024_chick_box", -- Item ID: halloween_2024_chick_box
         [3] = {
-            ["buy_count"] = 1 -- Buy one item at a time
+            ["buy_count"] = 20 -- Buy one item at a time
         }
     }
-
-        game:GetService("ReplicatedStorage").API:FindFirstChild("ShopAPI/BuyItem"):InvokeServer(unpack(args))
+     game:GetService("ReplicatedStorage").API:FindFirstChild("ShopAPI/BuyItem"):InvokeServer(unpack(args))
 end
 
 task.spawn(function()
-    local maxPurchases = 50 -- Set the maximum number of purchases
+    local maxPurchases = 50 
     local purchaseCount = 0
 
     while purchaseCount < maxPurchases do
-        buyMassiveGift() -- Call the function to buy the gift
+        buyHalloweenGift() -- Call the function to buy the halloween_2024_chick_box
         purchaseCount = purchaseCount + 1
         wait(0.1) -- Minimal delay between purchases (adjust if needed)
     end
+    print("Finished purchasing " .. purchaseCount .. " halloween gifts.")
 
-    print("Finished purchasing " .. purchaseCount .. " massive gifts.")
-
-        task.spawn(function()
+    task.spawn(function()
         task.wait(5) -- Wait for 5 seconds
         local jsonData = [[
         {"toggles":{"autoopengifts":true},"inputs":[],"settings":{"hidemenu":"LeftControl"},"sliders":{"fpswithcpulimiter":5,"timebetweenwebhook":5},"dropdowns":{"petstotrade":[],"webhookstosend":[],"autochange_raritypets":[],"petselectedtotrade":[],"pettofarm":[]}}
         ]]
-
         makefolder("ProdigyX") -- Creates the folder "ProdigyX" if it doesn't already exist
         writefile("ProdigyX/ReQiuHub-920587237.prodx", jsonData) -- Writes the JSON data to the specified file
     end)
