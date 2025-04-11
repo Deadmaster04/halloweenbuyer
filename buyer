@@ -1,19 +1,3 @@
-task.wait(20)
-local function rename(remotename, hashedremote)
-    hashedremote.Name = remotename
-end
-
-local AC_MODULE = game:GetService("ReplicatedStorage").ClientModules.Core.RouterClient.RouterClient
-
-local initFunction = require(AC_MODULE).init
-local upvalueTable = getupvalue(initFunction, 7)
-
-if type(upvalueTable) == "table" then
-    table.foreach(upvalueTable, rename)
-else
-print("patch rip")
-end
-task.wait(20)
 local args = {
 	"pets",
 	"spring_2025_super_saru",
